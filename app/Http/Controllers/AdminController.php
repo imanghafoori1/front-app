@@ -48,9 +48,8 @@ class AdminController extends Controller
 
         if ($request->hasFile('image')) {
             $this->uploadImage($request, $product);
+            $product->save();
         }
-
-        $product->save();
 
         // Check if price has changed
         if ($oldPrice != $product->price) {
