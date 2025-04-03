@@ -49,7 +49,7 @@ class ProductController extends Controller
             if (! $err) {
                 $data = json_decode($response, true);
                 if (isset($data['rates']['EUR'])) {
-                    return $data['rates']['EUR'];
+                    return (float) $data['rates']['EUR'];
                 }
             }
         } catch (Exception $e) {
