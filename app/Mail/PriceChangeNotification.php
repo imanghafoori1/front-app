@@ -6,7 +6,6 @@ use Illuminate\Mail\Mailable;
 
 class PriceChangeNotification extends Mailable
 {
-
     /**
      * Create a new message instance.
      *
@@ -25,6 +24,6 @@ class PriceChangeNotification extends Mailable
     public function build()
     {
         return $this->subject('Product Price Change Notification')
-                    ->view('emails.price-change');
+            ->view('emails.price-change');
     }
 }

@@ -5,16 +5,16 @@ namespace Tests\Feature\Commands;
 use App\Jobs\SendPriceChangeNotification;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
-use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class UpdateProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         Bus::fake();
@@ -37,7 +37,7 @@ class UpdateProductTest extends TestCase
             '--description' => 'old description',
         ])->assertOk()
             ->assertExitCode(0)
-            ->expectsOutputToContain("Price changed from 220 to 240.")
+            ->expectsOutputToContain('Price changed from 220 to 240.')
             ->expectsOutputToContain('Price change notification dispatched to ')
             ->expectsOutputToContain('Product updated successfully.');
 

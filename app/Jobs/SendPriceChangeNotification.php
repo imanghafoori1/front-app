@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Mail\PriceChangeNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\PriceChangeNotification;
 
 class SendPriceChangeNotification implements ShouldQueue
 {
@@ -30,12 +30,12 @@ class SendPriceChangeNotification implements ShouldQueue
      */
     public function handle()
     {
-            Mail::to($this->email)
-                ->send(new PriceChangeNotification(
-                    $this->product,
-                    $this->oldPrice,
-                    $this->newPrice
-                ));
+        Mail::to($this->email)
+            ->send(new PriceChangeNotification(
+                $this->product,
+                $this->oldPrice,
+                $this->newPrice
+            ));
 
     }
 }

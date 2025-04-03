@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendPriceChangeNotification;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use App\Jobs\SendPriceChangeNotification;
 
 class AdminController extends Controller
 {
     public function products()
     {
         $products = Product::all();
+
         return view('admin.products', compact('products'));
     }
 
     public function editProduct($id)
     {
         $product = Product::findOrFail($id);
+
         return view('admin.edit_product', compact('product'));
     }
 
@@ -63,7 +65,7 @@ class AdminController extends Controller
                     $notificationEmail
                 );
             } catch (Exception $e) {
-                 Log::error('Failed to dispatch price change notification: ' . $e->getMessage());
+                Log::error('Failed to dispatch price change notification: '.$e->getMessage());
             }
         }
 
@@ -99,7 +101,7 @@ class AdminController extends Controller
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
-            'price' => $request->price
+            'price' => $request->price,
         ]);
 
         if ($request->hasFile('image')) {

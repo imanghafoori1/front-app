@@ -82,7 +82,7 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect('/');
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         User::query()->delete();
         parent::tearDown();
