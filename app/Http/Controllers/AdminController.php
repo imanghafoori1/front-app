@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
@@ -85,7 +86,7 @@ class AdminController extends Controller
                     $product->price,
                     $notificationEmail
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                  Log::error('Failed to dispatch price change notification: ' . $e->getMessage());
             }
         }

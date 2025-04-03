@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use App\Models\Product;
 use App\Jobs\SendPriceChangeNotification;
@@ -84,7 +85,7 @@ class UpdateProduct extends Command
                         $notificationEmail
                     );
                     $this->info("Price change notification dispatched to {$notificationEmail}.");
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->error("Failed to dispatch price change notification: " . $e->getMessage());
                 }
             }

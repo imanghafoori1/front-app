@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
@@ -51,7 +52,7 @@ class ProductController extends Controller
                     return $data['rates']['EUR'];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
         }
 
