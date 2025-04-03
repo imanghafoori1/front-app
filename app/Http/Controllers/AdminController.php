@@ -40,7 +40,7 @@ class AdminController extends Controller
 
     public function editProduct($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         return view('admin.edit_product', compact('product'));
     }
 
@@ -58,7 +58,7 @@ class AdminController extends Controller
                 ->withInput();
         }
 
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
 
         // Store the old price before updating
         $oldPrice = $product->price;
@@ -96,7 +96,7 @@ class AdminController extends Controller
 
     public function deleteProduct($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $product->delete();
 
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
