@@ -77,7 +77,7 @@ class AdminController extends Controller
         // Check if price has changed
         if ($oldPrice != $product->price) {
             // Get notification email from env
-            $notificationEmail = env('PRICE_NOTIFICATION_EMAIL', 'admin@example.com');
+            $notificationEmail = config()->string('appfront.products.price_notification_email');
 
             try {
                 SendPriceChangeNotification::dispatch(
