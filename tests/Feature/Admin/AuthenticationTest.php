@@ -64,6 +64,24 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    #[Test]
+    public function only_guests_can_login_with_valid_credentials()
+    {
+        // arrange:
+        $admin = User::factory()->create();
+        $this->actingAs($admin);
+
+        // act:
+        $response = $this->get('login');
+        // assert:
+        $response->assertRedirect('/');
+
+        // act:
+        $response = $this->post('login');
+        // assert:
+        $response->assertRedirect('/');
+    }
+
     public function tearDown(): void
     {
         User::query()->delete();
