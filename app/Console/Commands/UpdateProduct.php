@@ -36,7 +36,7 @@ class UpdateProduct extends Command
         if (is_null($product)) {
             $this->error('Product not found with id: ' . $id);
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $data = [];
@@ -44,11 +44,11 @@ class UpdateProduct extends Command
             $data['name'] = $this->option('name');
             if (empty($data['name']) || trim($data['name']) == '') {
                 $this->error("Name cannot be empty.");
-                return 1;
+                return Command::FAILURE;
             }
             if (strlen($data['name']) < 3) {
                 $this->error("Name must be at least 3 characters long.");
-                return 1;
+                return Command::FAILURE;
             }
         }
         if ($this->option('description')) {
@@ -89,6 +89,6 @@ class UpdateProduct extends Command
             $this->info("No changes provided. Product remains unchanged.");
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
