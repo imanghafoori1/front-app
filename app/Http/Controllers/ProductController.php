@@ -56,6 +56,6 @@ class ProductController extends Controller
 
         }
 
-        return env('EXCHANGE_RATE', 0.85);
+        return (float) config('appfront.products.exchange_rate');
     }
 }
