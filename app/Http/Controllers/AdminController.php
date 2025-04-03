@@ -45,10 +45,7 @@ class AdminController extends Controller
         $product->update($request->all());
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
-            $product->image = 'uploads/' . $filename;
+            $this->uploadImage($request, $product);
         }
 
         $product->save();
@@ -106,10 +103,7 @@ class AdminController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
-            $product->image = 'uploads/' . $filename;
+            $this->uploadImage($request, $product);
         } else {
             $product->image = 'product-placeholder.jpg';
         }
@@ -117,5 +111,13 @@ class AdminController extends Controller
         $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product added successfully');
+    }
+
+    private function uploadImage(Request $request, $product): void
+    {
+        $file = $request->file('image');
+        $filename = $file->getClientOriginalExtension();
+        $file->move(public_path('uploads'), $filename);
+        $product->image = 'uploads/'.$filename;
     }
 }
