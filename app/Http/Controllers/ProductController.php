@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Exception;
+use App\Services\ExchangeRateService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -25,37 +25,13 @@ class ProductController extends Controller
         return view('products.show', compact('product', 'exchangeRate'));
     }
 
-    /**
-     * @return float
-     */
-    private function getExchangeRate()
+    private function getExchangeRate(): float
     {
-        try {
-            $curl = curl_init();
-
-            curl_setopt_array($curl, [
-                CURLOPT_URL => 'https://open.er-api.com/v6/latest/USD',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 5,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'GET',
-            ]);
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if (! $err) {
-                $data = json_decode($response, true);
-                if (isset($data['rates']['EUR'])) {
-                    return (float) $data['rates']['EUR'];
-                }
-            }
-        } catch (Exception $e) {
-
-        }
-
-        return (float) config('appfront.products.exchange_rate');
+        /*
+         * we resolve the object from container so that
+         * we can mock it when running tests and avoid
+         * calling an external service over the wire.
+         */
+        return resolve(ExchangeRateService::class)->getRate();
     }
 }
