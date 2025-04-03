@@ -4,9 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Product;
-use Illuminate\Support\Facades\Validator;
 use App\Jobs\SendPriceChangeNotification;
-use Illuminate\Support\Facades\Log;
 
 class UpdateProduct extends Command
 {
