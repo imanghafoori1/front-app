@@ -63,7 +63,7 @@ class UpdateProduct extends Command
 
         if (!empty($data)) {
             $product->update($data);
-            $product->save();
+            // $product->save();  <=== no need to call the "save" after the "update".
 
             $this->info("Product updated successfully.");
 
