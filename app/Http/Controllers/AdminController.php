@@ -42,7 +42,7 @@ class AdminController extends Controller
         // Store the old price before updating
         $oldPrice = $product->price;
 
-        $product->update($request->all());
+        $product->update($request->only(['name', 'description', 'price']));
 
         if ($request->hasFile('image')) {
             $this->uploadImage($request, $product);
