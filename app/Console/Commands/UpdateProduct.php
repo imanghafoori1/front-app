@@ -33,6 +33,12 @@ class UpdateProduct extends Command
         $id = $this->argument('id');
         $product = Product::find($id);
 
+        if (is_null($product)) {
+            $this->error('Product not found with id: ' . $id);
+
+            return 1;
+        }
+
         $data = [];
         if ($this->option('name')) {
             $data['name'] = $this->option('name');
