@@ -74,8 +74,7 @@ class AdminController extends Controller
 
     public function deleteProduct($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        Product::findOrFail($id)->delete();
 
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
     }
