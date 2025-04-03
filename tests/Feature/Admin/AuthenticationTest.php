@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Admin;
+namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
