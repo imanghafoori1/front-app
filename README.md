@@ -1,6 +1,7 @@
 [![Test](https://github.com/imanghafoori1/front-app/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/imanghafoori1/front-app/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/imanghafoori1/front-app/badge.svg?branch=main)](https://coveralls.io/github/imanghafoori1/front-app?branch=main)
 [![conventions](https://github.com/imanghafoori1/front-app/actions/workflows/conventions.yml/badge.svg?branch=main)](https://github.com/imanghafoori1/front-app/actions/workflows/conventions.yml)
+[![style](https://github.com/imanghafoori1/front-app/actions/workflows/pint.yml/badge.svg?branch=main)](https://github.com/imanghafoori1/front-app/actions/workflows/pint.yml)
 
 ### Rerfactors:
 - Route model binding
