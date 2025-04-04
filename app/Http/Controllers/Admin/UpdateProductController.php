@@ -2,29 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\UpdateProductRequest;
 use App\Jobs\SendPriceChangeNotification;
 use App\Models\Product;
 use App\Services\ImageUploadService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class UpdateProductController
 {
-    public function __invoke(Request $request, $id)
+    public function __invoke(UpdateProductRequest $request, $id)
     {
-        // Validate the name field
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $product = Product::query()->findOrFail($id);
 
         $product->fill($request->only(['name', 'description', 'price']));

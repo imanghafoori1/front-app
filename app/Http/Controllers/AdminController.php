@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use App\Services\ImageUploadService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -35,19 +34,8 @@ class AdminController extends Controller
         return view('admin.add_product');
     }
 
-    public function addProduct(Request $request)
+    public function addProduct(StoreProductRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $product = Product::query()->create([
             'name' => $request->name,
             'description' => $request->description,
@@ -61,7 +49,7 @@ class AdminController extends Controller
         return redirect()->route('admin.products')->with('success', 'Product added successfully');
     }
 
-    private function handleImage(Request $request, Product $product): string
+    private function handleImage($request, Product $product): string
     {
         if (! $request->hasFile('image')) {
             return 'product-placeholder.jpg';
