@@ -6,21 +6,21 @@ use App\Models\Product;
 
 class AdminController extends Controller
 {
-    public function products()
+    public function index()
     {
         $products = Product::all();
 
         return view('admin.products', compact('products'));
     }
 
-    public function editProduct($id)
+    public function edit($id)
     {
         $product = Product::query()->findOrFail($id);
 
         return view('admin.edit_product', compact('product'));
     }
 
-    public function deleteProduct($id)
+    public function delete($id)
     {
         Product::query()->findOrFail($id)->delete();
 

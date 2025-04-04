@@ -17,11 +17,11 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
+    Route::get('/admin/products', [AdminController::class, 'index'])->name('admin.products');
     Route::view('/admin/products/add', 'admin.add_product')->name('admin.add.product');
     Route::post('/admin/products/add', StoreProcustController::class)->name('admin.add.product.submit');
-    Route::get('/admin/products/edit/{id}', [AdminController::class, 'editProduct'])->name('admin.edit.product');
+    Route::get('/admin/products/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit.product');
     Route::patch('/admin/products/edit/{id}', UpdateProductController::class)->name('admin.update.product');
-    Route::get('/admin/products/delete/{id}', [AdminController::class, 'deleteProduct'])->name('admin.delete.product');
+    Route::get('/admin/products/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete.product');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
