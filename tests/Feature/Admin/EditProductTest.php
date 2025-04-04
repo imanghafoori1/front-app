@@ -43,6 +43,19 @@ class EditProductTest extends TestCase
     }
 
     #[Test]
+    public function admin_can_not_open_edit_form_for_invalid_id()
+    {
+        // arrange:
+        $this->actingAs(User::factory()->createQuietly());
+
+        // act:
+        $response = $this->get('/admin/products/edit/434');
+
+        // assert:
+        $response->assertStatus(404);
+    }
+
+    #[Test]
     public function admin_form_data_is_validated()
     {
         // arrange:

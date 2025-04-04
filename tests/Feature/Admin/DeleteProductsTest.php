@@ -61,4 +61,18 @@ class DeleteProductsTest extends TestCase
         $this->assertDatabaseHas('products', ['id' => $product2->id]);
         $this->assertDatabaseHas('products', ['id' => $product3->id]);
     }
+
+    #[Test]
+    public function admin_deletes_non_existing_product()
+    {
+        // arrange:
+        Event::fake();
+        $this->actingAs(User::factory()->createQuietly());
+
+        // act:
+        $response = $this->get('/admin/products/delete/332');
+
+        // assert:
+        $response->assertStatus(404);
+    }
 }
