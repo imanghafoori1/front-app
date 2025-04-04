@@ -27,21 +27,18 @@ class UpdateProductController
 
         $product = Product::findOrFail($id);
 
-        // Store the old price before updating
-        $oldPrice = $product->price;
-
-        $product->update($request->only(['name', 'description', 'price']));
+        $product->fill($request->only(['name', 'description', 'price']));
 
         if ($request->hasFile('image')) {
-            ImageUploadService::resolve()->handle($request->file('image'), $product);
-            $product->save();
+            $product->image = ImageUploadService::resolve()->handle($request->file('image'), $product);
         }
 
         // Check if price has changed
-        if ($oldPrice != $product->price) {
-            $exception = SendPriceChangeNotification::forProduct($product, $oldPrice);
+        if ($product->isDirty('price')) {
+            $exception = SendPriceChangeNotification::forProduct($product);
             $exception && $this->logFailedNotification($exception);
         }
+        $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully');
     }

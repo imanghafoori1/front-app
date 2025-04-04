@@ -60,22 +60,18 @@ class UpdateProduct extends Command
             $data['price'] = $this->option('price');
         }
 
-        $oldPrice = $product->price;
-
         if (! empty($data)) {
-            $product->update($data);
-            // $product->save();  <=== no need to call the "save" after the "update".
+            $product->fill($data);
 
             $this->info('Product updated successfully.');
 
             // Check if price has changed
-            if (isset($data['price']) && $oldPrice != $product->price) {
-                $this->info("Price changed from {$oldPrice} to {$product->price}.");
-
-                $result = SendPriceChangeNotification::forProduct($product, $oldPrice);
-
+            if ($product->isDirty('price')) {
+                $this->printPriceChange($product);
+                $result = SendPriceChangeNotification::forProduct($product);
                 $this->handleResults($result);
             }
+            $product->save();
         } else {
             $this->info('No changes provided. Product remains unchanged.');
         }
@@ -91,5 +87,10 @@ class UpdateProduct extends Command
             $notificationEmail = SendPriceChangeNotification::getEmailNotification();
             $this->info("Price change notification dispatched to {$notificationEmail}.");
         }
+    }
+
+    private function printPriceChange(Product $product): void
+    {
+        $this->info("Price changed from {$product->getOriginal('price')} to {$product->price}.");
     }
 }

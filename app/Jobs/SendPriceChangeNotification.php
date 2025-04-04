@@ -45,14 +45,14 @@ class SendPriceChangeNotification implements ShouldQueue
             ));
     }
 
-    public static function forProduct(Product $product, $oldPrice): ?Exception
+    public static function forProduct(Product $product): ?Exception
     {
         $notificationEmail = self::getEmailNotification();
 
         try {
             self::dispatch(
                 $product,
-                $oldPrice,
+                $product->getOriginal('price'),
                 $product->price,
                 $notificationEmail
             );

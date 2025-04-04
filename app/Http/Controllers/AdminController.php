@@ -54,14 +54,21 @@ class AdminController extends Controller
             'price' => $request->price,
         ]);
 
-        if ($request->hasFile('image')) {
-            ImageUploadService::resolve()->handle($request->file('image'), $product);
-        } else {
-            $product->image = 'product-placeholder.jpg';
-        }
+        $product->image = $this->handleImage($request, $product);
 
         $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product added successfully');
+    }
+
+    private function handleImage(Request $request, Product $product): string
+    {
+        if (! $request->hasFile('image')) {
+            return 'product-placeholder.jpg';
+        }
+
+        $file = $request->file('image');
+
+        return ImageUploadService::resolve()->handle($file, $product);
     }
 }

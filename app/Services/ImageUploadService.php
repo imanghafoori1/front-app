@@ -18,12 +18,13 @@ class ImageUploadService
         return resolve(self::class);
     }
 
-    public function handle($file, Product $product): void
+    public function handle($file, Product $product): string
     {
         // $filename = $file->getClientOriginalExtension();  <== this user input value is not safe!
         $safeName = $this->getSafeFilename($product, $file);
         $file->move(public_path('uploads'), $safeName);
-        $product->image = 'uploads/'.$safeName;
+
+        return 'uploads/'.$safeName;
     }
 
     /**
