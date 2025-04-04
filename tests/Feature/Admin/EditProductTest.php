@@ -63,7 +63,7 @@ class EditProductTest extends TestCase
         $product1 = Product::factory()->createQuietly();
 
         // act:
-        $response = $this->post("/admin/products/edit/$product1->id", [
+        $response = $this->patch("/admin/products/edit/$product1->id", [
             'name' => 'ne',
             'price' => 134.59,
             'description' => 'new Description',
@@ -91,7 +91,7 @@ class EditProductTest extends TestCase
         $product2 = Product::factory()->createQuietly();
 
         // act:
-        $response = $this->post("/admin/products/edit/$product1->id", [
+        $response = $this->patch("/admin/products/edit/$product1->id", [
             'name' => 'new name of Product',
             'price' => 134.59,
             'description' => 'new Description',
@@ -129,7 +129,7 @@ class EditProductTest extends TestCase
         $product1 = Product::factory()->createQuietly(['price' => 134.59]);
 
         // act:
-        $response = $this->post("/admin/products/edit/$product1->id", [
+        $response = $this->patch("/admin/products/edit/$product1->id", [
             'name' => 'new name of Product',
             'price' => 134.59,
             'description' => 'new Description',
