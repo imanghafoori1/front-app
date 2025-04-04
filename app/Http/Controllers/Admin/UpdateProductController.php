@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateProductController
 {
-    public function __invoke(UpdateProductRequest $request, $id)
+    public function __invoke(UpdateProductRequest $request, Product $product)
     {
-        $product = Product::query()->findOrFail($id);
-
         $product->fill($request->only(['name', 'description', 'price']));
 
         if ($request->hasFile('image')) {

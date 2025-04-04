@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
-Route::get('/products/{product_id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
@@ -21,9 +21,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('products');
         Route::view('/add', 'admin.add_product')->name('add.product');
         Route::post('/add', StoreProcustController::class)->name('add.product.submit');
-        Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('edit.product');
-        Route::patch('/edit/{id}', UpdateProductController::class)->name('update.product');
-        Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('delete.product');
+        Route::get('/edit/{product}', [AdminController::class, 'edit'])->name('edit.product');
+        Route::patch('/edit/{product}', UpdateProductController::class)->name('update.product');
+        Route::get('/delete/{product}', [AdminController::class, 'delete'])->name('delete.product');
     });
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

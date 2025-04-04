@@ -13,16 +13,14 @@ class AdminController extends Controller
         return view('admin.products', compact('products'));
     }
 
-    public function edit($id)
+    public function edit(Product $product)
     {
-        $product = Product::query()->findOrFail($id);
-
         return view('admin.edit_product', compact('product'));
     }
 
-    public function delete($id)
+    public function delete(Product $product)
     {
-        Product::query()->findOrFail($id)->delete();
+        $product->delete();
 
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
     }

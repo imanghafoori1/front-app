@@ -15,9 +15,8 @@ class ProductController extends Controller
         return view('products.list', compact('products', 'exchangeRate'));
     }
 
-    public function show(int $id)
+    public function show(Product $product)
     {
-        $product = Product::query()->findOrFail($id);
         $exchangeRate = $this->getExchangeRate();
 
         return view('products.show', compact('product', 'exchangeRate'));
