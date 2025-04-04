@@ -18,7 +18,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
-    Route::get('/admin/products/add', [AdminController::class, 'addProductForm'])->name('admin.add.product');
+    Route::view('/admin/products/add', 'admin.add_product')->name('admin.add.product');
     Route::post('/admin/products/add', StoreProcustController::class)->name('admin.add.product.submit');
     Route::get('/admin/products/edit/{id}', [AdminController::class, 'editProduct'])->name('admin.edit.product');
     Route::patch('/admin/products/edit/{id}', UpdateProductController::class)->name('admin.update.product');

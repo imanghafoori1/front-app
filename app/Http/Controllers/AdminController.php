@@ -26,9 +26,4 @@ class AdminController extends Controller
 
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
     }
-
-    public function addProductForm()
-    {
-        return view('admin.add_product');
-    }
 }
