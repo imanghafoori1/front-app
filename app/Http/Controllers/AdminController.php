@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
-use App\Services\ImageUploadService;
 
 class AdminController extends Controller
 {
@@ -32,31 +30,5 @@ class AdminController extends Controller
     public function addProductForm()
     {
         return view('admin.add_product');
-    }
-
-    public function addProduct(StoreProductRequest $request)
-    {
-        $product = Product::query()->create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-        ]);
-
-        $product->image = $this->handleImage($request, $product);
-
-        $product->save();
-
-        return redirect()->route('admin.products')->with('success', 'Product added successfully');
-    }
-
-    private function handleImage($request, Product $product): string
-    {
-        if (! $request->hasFile('image')) {
-            return 'product-placeholder.jpg';
-        }
-
-        $file = $request->file('image');
-
-        return ImageUploadService::resolve()->handle($file, $product);
     }
 }
