@@ -2,38 +2,31 @@
 
 namespace App\Services;
 
-use Exception;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 class ExchangeRateService
 {
     public function getRate(): float
     {
-        try {
-            $curl = curl_init();
+        $response = $this->fetchExchangeRate();
 
-            curl_setopt_array($curl, [
-                CURLOPT_URL => 'https://open.er-api.com/v6/latest/USD',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 5,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'GET',
-            ]);
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if (! $err) {
-                $data = json_decode($response, true);
-                if (isset($data['rates']['EUR'])) {
-                    return (float) $data['rates']['EUR'];
-                }
-            }
-        } catch (Exception $e) {
-
+        if ($response->failed()) {
+            return $this->getDefaultRate();
         }
 
+        $rate = (float) $response->json('rates.EUR');
+
+        return $rate ?: $this->getDefaultRate();
+    }
+
+    private function getDefaultRate(): float
+    {
         return (float) config('appfront.products.exchange_rate');
+    }
+
+    private function fetchExchangeRate($currency = 'USD', $timeout = 5): Response
+    {
+        return Http::timeout($timeout)->get('https://open.er-api.com/v6/latest/'.$currency);
     }
 }
