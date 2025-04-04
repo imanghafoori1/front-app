@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendPriceChangeNotification;
 use App\Models\Product;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -48,7 +47,7 @@ class AdminController extends Controller
         $product->update($request->only(['name', 'description', 'price']));
 
         if ($request->hasFile('image')) {
-            $this->uploadImage($request, $product);
+            ImageUploadService::resolve()->handle($request->file('image'), $product);
             $product->save();
         }
 
@@ -93,7 +92,7 @@ class AdminController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $this->uploadImage($request, $product);
+            ImageUploadService::resolve()->handle($request->file('image'), $product);
         } else {
             $product->image = 'product-placeholder.jpg';
         }
@@ -101,24 +100,6 @@ class AdminController extends Controller
         $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product added successfully');
-    }
-
-    private function uploadImage(Request $request, Product $product): void
-    {
-        $file = $request->file('image');
-
-        // $filename = $file->getClientOriginalExtension();  <== this user input value is not safe!
-        $safeName = $this->getSafeFilename($product, $file);
-        $file->move(public_path('uploads'), $safeName);
-        $product->image = 'uploads/'.$safeName;
-    }
-
-    /**
-     * @see https://securinglaravel.com/laravel-security-file-upload-vulnerability/
-     */
-    private function getSafeFilename(Product $product, UploadedFile $file): string
-    {
-        return Str::limit(md5($product->getKey()), 20, '').'.'.$file->extension();
     }
 
     private function logFailedNotification($e)
