@@ -25,7 +25,7 @@ class UpdateProductController
                 ->withInput();
         }
 
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
         $product->fill($request->only(['name', 'description', 'price']));
 

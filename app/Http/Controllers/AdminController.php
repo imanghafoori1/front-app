@@ -18,14 +18,14 @@ class AdminController extends Controller
 
     public function editProduct($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
         return view('admin.edit_product', compact('product'));
     }
 
     public function deleteProduct($id)
     {
-        Product::findOrFail($id)->delete();
+        Product::query()->findOrFail($id)->delete();
 
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
     }
@@ -48,7 +48,7 @@ class AdminController extends Controller
                 ->withInput();
         }
 
-        $product = Product::create([
+        $product = Product::query()->create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,

@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function show(Request $request)
     {
         $id = $request->route('product_id');
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
         $exchangeRate = $this->getExchangeRate();
 
         return view('products.show', compact('product', 'exchangeRate'));
