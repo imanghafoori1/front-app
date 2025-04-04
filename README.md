@@ -1,32 +1,38 @@
-### Laravel Developer Test Task
+### Rerfactors:
+- Route model binding
+- Form request classes
+- Invokable controllers
+- Decorator pattern for caching
+- Singleton pattern
+- `Route::prefix()` and `Route::name()`, 
+- PHP promoted properties
+- Removed useless class constructor
+- Extract blade partials
+- Use `Http` facade instead of `Curl`
+- Used `Patch` method to update a record.
 
-You are provided with a small Laravel application that displays a list of products and individual product details. Additionally, the application includes an admin interface for editing products, or alternatively, products can be edited using a command-line command.
+### Fixed security issues:
+- Mass assignment
+- File upload
+- Added validation rules for price and image
 
-### Task Objectives
-Your goal is to refactor the provided application, focusing on the following:
+### Github Actions:
+- pint
+- laravel-microscope check
+- running tests and send coverage report to coveralls.io
 
-- **Code Refactoring:**
-  - Improve the overall quality, readability, and maintainability of the code.
-  - **Apply Laravel best practices, design patterns, and standards suitable for enterprise-level applications.**
+### Dev tools
+- Installed GrumPHP to run pint on every commit
+- Installed Laravel IDE-helper
 
-- **Bug Fixing:**
-  - Identify and fix any existing bugs.
+### Bug fixes:
+- replace `env` calls with `config` calls to make config cache possible.
 
-- **Security Audit:**
-  - Perform a thorough security review.
-  - Implement necessary fixes and enhancements to secure the application.
+### Suggestions:
+- Possibly use laravel-widgetize to cache and clean-up code.
 
-- **Improvements:**
-  - Implement any additional improvements that you consider beneficial (performance optimization, better code organization, etc.).
-
-### Important Constraints
-1. The visual appearance of the application in the browser must remain exactly the same.
-2. The existing functionality must be preserved completely.
-3. The structure of the database cannot be changed.
-
-Your final submission should demonstrate your ability to write clean, secure, and maintainable code adhering to industry standards.
-
-**Submission:**  
-Please provide a link to your public repository containing the refactored and improved code.
-
-Additionally, you may optionally include a list detailing the changes you've made or suggestions for further improvements.
+### Tests:
+- Added a ton of tests, a little bit is still missing though.
+- Make structure of the application modular and folder it around it's features not type the type of classes.
+- Paginate index list.
+- Add more validation for user inputs.
