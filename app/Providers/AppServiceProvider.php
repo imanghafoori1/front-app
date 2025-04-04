@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Decorators\ExchangeRateServiceDecorator;
+use App\Services\ExchangeRateService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        app()->singleton(ExchangeRateService::class, function () {
+            return new ExchangeRateServiceDecorator(new ExchangeRateService, 60);
+        });
     }
 
     /**
