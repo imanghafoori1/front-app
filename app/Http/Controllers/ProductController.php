@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Services\ExchangeRateService;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -16,9 +15,8 @@ class ProductController extends Controller
         return view('products.list', compact('products', 'exchangeRate'));
     }
 
-    public function show(Request $request)
+    public function show(int $id)
     {
-        $id = $request->route('product_id');
         $product = Product::query()->findOrFail($id);
         $exchangeRate = $this->getExchangeRate();
 
