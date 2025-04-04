@@ -4,11 +4,12 @@ namespace App\Console\Commands;
 
 use App\Jobs\SendPriceChangeNotification;
 use App\Models\Product;
-use Exception;
 use Illuminate\Console\Command;
 
 class UpdateProduct extends Command
 {
+    use ConsolePrinters;
+
     /**
      * The name and signature of the console command.
      *
@@ -31,7 +32,7 @@ class UpdateProduct extends Command
     public function handle()
     {
         $id = $this->argument('id');
-        $product = Product::find($id);
+        $product = Product::query()->find($id);
 
         if (is_null($product)) {
             $this->error('Product not found with id: '.$id);
@@ -39,58 +40,56 @@ class UpdateProduct extends Command
             return Command::FAILURE;
         }
 
-        $data = [];
-        if ($this->option('name')) {
-            $data['name'] = $this->option('name');
-            if (empty($data['name']) || trim($data['name']) == '') {
-                $this->error('Name cannot be empty.');
+        $data = $this->readInputs();
 
-                return Command::FAILURE;
-            }
-            if (strlen($data['name']) < 3) {
-                $this->error('Name must be at least 3 characters long.');
+        if ($data['name']) {
+            $error = $this->checkNameOption($data['name']);
+            if ($error) {
+                $this->error($error);
 
                 return Command::FAILURE;
             }
         }
-        if ($this->option('description')) {
-            $data['description'] = $this->option('description');
-        }
-        if ($this->option('price')) {
-            $data['price'] = $this->option('price');
-        }
 
-        if (! empty($data)) {
-            $product->fill($data);
+        $data = array_filter($data);
 
-            $this->info('Product updated successfully.');
-
-            // Check if price has changed
-            if ($product->isDirty('price')) {
-                $this->printPriceChange($product);
-                $result = SendPriceChangeNotification::forProduct($product);
-                $this->handleResults($result);
-            }
-            $product->save();
-        } else {
-            $this->info('No changes provided. Product remains unchanged.');
-        }
+        $data ? $this->handleData($product, $data) : $this->printNoChange();
 
         return Command::SUCCESS;
     }
 
-    private function handleResults(?Exception $e): void
+    private function handleData($product, array $data): void
     {
-        if ($e) {
-            $this->error('Failed to dispatch price change notification: '.$e->getMessage());
-        } else {
-            $notificationEmail = SendPriceChangeNotification::getEmailNotification();
-            $this->info("Price change notification dispatched to {$notificationEmail}.");
+        $product->fill($data);
+
+        $this->info('Product updated successfully.');
+
+        // Check if price has changed
+        if ($product->isDirty('price')) {
+            $this->printPriceChange($product->getOriginal('price'), $product->price);
+            $result = SendPriceChangeNotification::forProduct($product);
+            $this->handleResults($result);
+        }
+        $product->save();
+    }
+
+    private function checkNameOption($name)
+    {
+        if (empty($name) || trim($name) == '') {
+            return 'Name cannot be empty.';
+        }
+
+        if (strlen($name) < 3) {
+            return 'Name must be at least 3 characters long.';
         }
     }
 
-    private function printPriceChange(Product $product): void
+    private function readInputs(): array
     {
-        $this->info("Price changed from {$product->getOriginal('price')} to {$product->price}.");
+        return [
+            'name' => $this->option('name'),
+            'description' => $this->option('description'),
+            'price' => $this->option('price'),
+        ];
     }
 }
