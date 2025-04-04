@@ -72,24 +72,24 @@ class UpdateProduct extends Command
             if (isset($data['price']) && $oldPrice != $product->price) {
                 $this->info("Price changed from {$oldPrice} to {$product->price}.");
 
-                $notificationEmail = config()->string('appfront.products.price_notification_email');
+                $result = SendPriceChangeNotification::forProduct($product, $oldPrice);
 
-                try {
-                    SendPriceChangeNotification::dispatch(
-                        $product,
-                        $oldPrice,
-                        $product->price,
-                        $notificationEmail
-                    );
-                    $this->info("Price change notification dispatched to {$notificationEmail}.");
-                } catch (Exception $e) {
-                    $this->error('Failed to dispatch price change notification: '.$e->getMessage());
-                }
+                $this->handleResults($result);
             }
         } else {
             $this->info('No changes provided. Product remains unchanged.');
         }
 
         return Command::SUCCESS;
+    }
+
+    private function handleResults(?Exception $e): void
+    {
+        if ($e) {
+            $this->error('Failed to dispatch price change notification: '.$e->getMessage());
+        } else {
+            $notificationEmail = SendPriceChangeNotification::getEmailNotification();
+            $this->info("Price change notification dispatched to {$notificationEmail}.");
+        }
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendPriceChangeNotification;
 use App\Models\Product;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -55,19 +54,8 @@ class AdminController extends Controller
 
         // Check if price has changed
         if ($oldPrice != $product->price) {
-            // Get notification email from env
-            $notificationEmail = config()->string('appfront.products.price_notification_email');
-
-            try {
-                SendPriceChangeNotification::dispatch(
-                    $product,
-                    $oldPrice,
-                    $product->price,
-                    $notificationEmail
-                );
-            } catch (Exception $e) {
-                Log::error('Failed to dispatch price change notification: '.$e->getMessage());
-            }
+            $exception = SendPriceChangeNotification::forProduct($product, $oldPrice);
+            $exception && $this->logFailedNotification($exception);
         }
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully');
@@ -131,5 +119,10 @@ class AdminController extends Controller
     private function getSafeFilename(Product $product, UploadedFile $file): string
     {
         return Str::limit(md5($product->getKey()), 20, '').'.'.$file->extension();
+    }
+
+    private function logFailedNotification($e)
+    {
+        Log::error('Failed to dispatch price change notification: '.$e->getMessage());
     }
 }

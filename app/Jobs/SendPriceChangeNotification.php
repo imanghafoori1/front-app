@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Mail\PriceChangeNotification;
+use App\Models\Product;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,6 +25,11 @@ class SendPriceChangeNotification implements ShouldQueue
         //
     }
 
+    public static function getEmailNotification(): string
+    {
+        return config()->string('appfront.products.price_notification_email');
+    }
+
     /**
      * Execute the job.
      *
@@ -36,6 +43,23 @@ class SendPriceChangeNotification implements ShouldQueue
                 $this->oldPrice,
                 $this->newPrice
             ));
+    }
 
+    public static function forProduct(Product $product, $oldPrice): ?Exception
+    {
+        $notificationEmail = self::getEmailNotification();
+
+        try {
+            self::dispatch(
+                $product,
+                $oldPrice,
+                $product->price,
+                $notificationEmail
+            );
+
+            return null;
+        } catch (Exception $e) {
+            return $e;
+        }
     }
 }
