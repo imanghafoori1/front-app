@@ -23,21 +23,22 @@
 
 ### Github Actions:
 - pint
-- laravel-microscope check
-- running tests and send coverage report to coveralls.io
+- laravel-microscope checks
+- running tests and sending coverage the report to coveralls.io
 
 ### Dev tools
 - Installed GrumPHP to run pint on every commit
 - Installed Laravel IDE-helper
 
 ### Bug fixes:
-- replace `env` calls with `config` calls to make config cache possible.
+- Replace `env` calls with `config` calls to make config cache possible.
 
 ### Suggestions:
 - Possibly use laravel-widgetize to cache and clean-up code.
+- Make the structure of the application modular and folder it around its features not type the type of classes.
+- Paginate index list.
+- Add more validation for user inputs.
 
 ### Tests:
 - Added a ton of tests, a little bit is still missing though.
-- Make structure of the application modular and folder it around it's features not type the type of classes.
-- Paginate index list.
-- Add more validation for user inputs.
+
